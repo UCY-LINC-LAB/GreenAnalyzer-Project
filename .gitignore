@@ -1,0 +1,8 @@
+.env
+.cache.sqlite
+logs.log
+.idea
+.ipynb_checkpoints
+data
+*logs.log
+db.sqlite3
