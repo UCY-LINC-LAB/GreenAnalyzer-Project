@@ -1,5 +1,5 @@
-# GreenAnalyzer-Project
-*A framework for Geo-distRibuted Edge-cloud Energy consumption ANALYsis towards Zero Emission Rates*
+![GreenAnalyzer Icon](https://ucy-linc-lab.github.io/GreenAnalyzerProject//images/logopic/logo_greenanalyzer.png)
+# *A framework for Geo-distRibuted Edge-cloud Energy consumption ANALYsis towards Zero Emission Rates*
 
 Geo-distributed data centers operate continuously, requiring substantial electrical energy and contributing to global carbon emissions. In 2022, the electricity consumption of data centers was estimated to be between 240-340 TWh, accounting for approximately 1-1.3% of global electricity demand. This consumption leads to significant operational costs and environmental impact, with around 330 million metric tons of CO2 emissions in 2020. Driven by the dual pressures of operational expenses and climate change, both large and small data center operators are increasingly focusing on providing carbon-neutral services. This shift is further motivated by initiatives such as the European Green Deal and the UK net-zero strategy.
 
@@ -51,7 +51,7 @@ GreenAnalyzer's renewable sources and carbon emission modeling paper BibTeX cita
 ```
 
 ### Acknowledgements
-GreenAnalyzer has indirectly received funding from the European Union’s Horizon Europe research and innovation action programme, via the [aerOS] (https://aeros-project.eu/) Open Call issued and executed under the aerOS project (Grant Agreement no. 101069732).
+GreenAnalyzer has indirectly received funding from the European Union’s Horizon Europe research and innovation action programme, via the [aerOS](https://aeros-project.eu/) Open Call issued and executed under the aerOS project (Grant Agreement no. 101069732).
 
 ### License
 The framework is open-sourced under the Apache 2.0 License base. The codebase of the framework is maintained by the authors for academic research and is therefore provided "as is".
