@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - "${PWD}/data:/var/lib/postgresql/data:Z"
+
+  web:
+    build: .
+    image: greenanalyzer:test
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      ENTSOE_API_KEY: ${ENTSOE_API_KEY}
+      SECRET_KEY: ${SECRET_KEY}
+
+volumes:
+  postgres_data:

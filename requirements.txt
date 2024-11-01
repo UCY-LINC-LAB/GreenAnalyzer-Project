@@ -1,0 +1,16 @@
+pandas<2.2.0
+pycaret==3.3.2
+Django==3.2.4
+psycopg2-binary==2.9.1
+djangorestframework==3.12.4
+requests
+django-oauth-toolkit==1.2.0
+django-cors-middleware==1.4.0
+skforecast==0.12.1
+lxml==5.2.2
+openmeteo-requests
+requests-cache
+retry-requests
+astral
+entsoe-py
+pycountry

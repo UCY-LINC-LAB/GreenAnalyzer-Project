@@ -1,0 +1,31 @@
+# Use the official Python image from the Docker Hub
+FROM python:3.9-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED 1
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the requirements file to the working directory
+COPY ./requirements.txt /app/
+
+RUN pip install --upgrade pip
+
+# Install the dependencies from the requirements file
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN apt-get update
+
+RUN apt-get install libgomp1
+# Copy the entire project to the working directory
+COPY . /app/
+
+# Expose the port the app runs on
+EXPOSE 8000
+
+# Copy the entrypoint script
+COPY --chmod=0755 ./entrypoint.sh /app/entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
