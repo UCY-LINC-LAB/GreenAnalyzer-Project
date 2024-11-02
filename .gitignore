@@ -6,4 +6,4 @@ logs.log
 data
 *logs.log
 db.sqlite3
-connector-confings.yaml
+GreenAnalyser-to-aerOS-connector/connector-configs.yaml
