@@ -40,7 +40,7 @@ GreenAnalyzer's energy modeling paper BibTeX citation:
 
 GreenAnalyzer's renewable sources and carbon emission modeling paper BibTeX citation:
 ```
-@INPROCEEDINGS{Kasioulis2024,
+@INPROCEEDINGS{Symeonides2024,
   author={Moysis Symeonides, Nicoletta Tsiopani, Georgios Maouris, Demetris Trihinas, George Pallis, Marios D. Dikaiakos},
   booktitle={Proceedings of the 17th IEEE/ACM International Conference on Utility and Cloud Computing},
   series={UCC `24},
