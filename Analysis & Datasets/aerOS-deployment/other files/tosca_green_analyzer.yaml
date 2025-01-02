@@ -1,0 +1,289 @@
+description: Federated Learning Workload for GreenAnalyzer
+node_templates:
+  client-7:
+    artifacts:
+      application_image:
+        file: fogemulator/flclientaeros:latest
+        repository: docker_hub
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+    interfaces:
+      Standard:
+        create:
+          implementation: application_image
+          inputs:
+            cliArgs: []
+            envVars:
+            - FL_HOST: '1'
+            - FL_NODE_ID: '1'
+            - FL_SERVER: server
+            - FL_BACKEND: pytorch
+            - FL_NODES: '2'
+            - FL_DATASET: MNIST
+            - FL_TRAINING_SET_SIZE: '50000'
+            - FL_TEST_SET_SIZE: '10000'
+            - FL_NUM_OF_THREADS: '4'
+            - TF_NUM_INTRAOP_THREADS: '4'
+            - TF_NUM_INTEROP_THREADS: '4'
+    requirements:
+    - host:
+        node_filter:
+          capabilities: null
+          properties:
+            id: urn:ngsi-ld:InfrastructureElement:aeros1-compute030
+    type: tosca.nodes.Container.Application
+  server:
+    artifacts:
+      application_image:
+        file: fogemulator/flserveraeros:latest
+        repository: docker_hub
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+    interfaces:
+      Standard:
+        create:
+          implementation: application_image
+          inputs:
+            cliArgs: []
+            envVars:
+            - FL_STRATEGY: FedAvg
+            - FL_NUM_OF_ROUNDS: '200'
+            - FL_FRACTION_FIT: '0.1'
+            - FL_FRACTION_EVAL: '0.1'
+            - FL_MIN_EVAL_CLIENTS: '8'
+            - FL_MIN_FIT_CLIENTS: '8'
+            - FL_MIN_AVAILABLE_CLIENTS: '8'
+            - FL_BACKEND: pytorch
+            - FL_DATASET: MNIST
+            - FL_EVAL_DATASET: 'false'
+    requirements:
+    - network:
+        properties:
+          ports:
+            port1:
+              properties:
+                protocol:
+                - tcp
+                source: 8080
+    - host:
+        node_filter:
+          capabilities: null
+          properties:
+            id: urn:ngsi-ld:InfrastructureElement:aeros1-compute005
+    type: tosca.nodes.Container.Application
+  client-6:
+    artifacts:
+      application_image:
+        file: fogemulator/flclientaeros:latest
+        repository: docker_hub
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+    interfaces:
+      Standard:
+        create:
+          implementation: application_image
+          inputs:
+            cliArgs: []
+            envVars:
+            - FL_HOST: '1'
+            - FL_NODE_ID: '1'
+            - FL_SERVER: server
+            - FL_BACKEND: pytorch
+            - FL_NODES: '2'
+            - FL_DATASET: MNIST
+            - FL_TRAINING_SET_SIZE: '50000'
+            - FL_TEST_SET_SIZE: '10000'
+            - FL_NUM_OF_THREADS: '4'
+            - TF_NUM_INTRAOP_THREADS: '4'
+            - TF_NUM_INTEROP_THREADS: '4'
+    requirements:
+    - host:
+        node_filter:
+          capabilities: null
+          properties:
+            id: urn:ngsi-ld:InfrastructureElement:aeros1-compute025
+    type: tosca.nodes.Container.Application
+  client-8:
+    artifacts:
+      application_image:
+        file: fogemulator/flclientaeros:latest
+        repository: docker_hub
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+    interfaces:
+      Standard:
+        create:
+          implementation: application_image
+          inputs:
+            cliArgs: []
+            envVars:
+            - FL_HOST: '1'
+            - FL_NODE_ID: '1'
+            - FL_SERVER: server
+            - FL_BACKEND: pytorch
+            - FL_NODES: '2'
+            - FL_DATASET: MNIST
+            - FL_TRAINING_SET_SIZE: '50000'
+            - FL_TEST_SET_SIZE: '10000'
+            - FL_NUM_OF_THREADS: '4'
+            - TF_NUM_INTRAOP_THREADS: '4'
+            - TF_NUM_INTEROP_THREADS: '4'
+    requirements:
+    - host:
+        node_filter:
+          capabilities: null
+          properties:
+            id: urn:ngsi-ld:InfrastructureElement:aeros1-compute036
+    type: tosca.nodes.Container.Application
+  client-3:
+    artifacts:
+      application_image:
+        file: fogemulator/flclientaeros:latest
+        repository: docker_hub
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+    interfaces:
+      Standard:
+        create:
+          implementation: application_image
+          inputs:
+            cliArgs: []
+            envVars:
+            - FL_HOST: '1'
+            - FL_NODE_ID: '1'
+            - FL_SERVER: server
+            - FL_BACKEND: pytorch
+            - FL_NODES: '2'
+            - FL_DATASET: MNIST
+            - FL_TRAINING_SET_SIZE: '50000'
+            - FL_TEST_SET_SIZE: '10000'
+            - FL_NUM_OF_THREADS: '4'
+            - TF_NUM_INTRAOP_THREADS: '4'
+            - TF_NUM_INTEROP_THREADS: '4'
+    requirements:
+    - host:
+        node_filter:
+          capabilities: null
+          properties:
+            id: urn:ngsi-ld:InfrastructureElement:aeros1-compute013
+    type: tosca.nodes.Container.Application
+  client-2:
+    artifacts:
+      application_image:
+        file: fogemulator/flclientaeros:latest
+        repository: docker_hub
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+    interfaces:
+      Standard:
+        create:
+          implementation: application_image
+          inputs:
+            cliArgs: []
+            envVars:
+            - FL_HOST: '1'
+            - FL_NODE_ID: '1'
+            - FL_SERVER: server
+            - FL_BACKEND: pytorch
+            - FL_NODES: '2'
+            - FL_DATASET: MNIST
+            - FL_TRAINING_SET_SIZE: '50000'
+            - FL_TEST_SET_SIZE: '10000'
+            - FL_NUM_OF_THREADS: '4'
+            - TF_NUM_INTRAOP_THREADS: '4'
+            - TF_NUM_INTEROP_THREADS: '4'
+    requirements:
+    - host:
+        node_filter:
+          capabilities: null
+          properties:
+            id: urn:ngsi-ld:InfrastructureElement:aeros1-compute012
+    type: tosca.nodes.Container.Application
+  client-5:
+    artifacts:
+      application_image:
+        file: fogemulator/flclientaeros:latest
+        repository: docker_hub
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+    interfaces:
+      Standard:
+        create:
+          implementation: application_image
+          inputs:
+            cliArgs: []
+            envVars:
+            - FL_HOST: '1'
+            - FL_NODE_ID: '1'
+            - FL_SERVER: server
+            - FL_BACKEND: pytorch
+            - FL_NODES: '2'
+            - FL_DATASET: MNIST
+            - FL_TRAINING_SET_SIZE: '50000'
+            - FL_TEST_SET_SIZE: '10000'
+            - FL_NUM_OF_THREADS: '4'
+            - TF_NUM_INTRAOP_THREADS: '4'
+            - TF_NUM_INTEROP_THREADS: '4'
+    requirements:
+    - host:
+        node_filter:
+          capabilities: null
+          properties:
+            id: urn:ngsi-ld:InfrastructureElement:aeros1-compute022
+    type: tosca.nodes.Container.Application
+  client-4:
+    artifacts:
+      application_image:
+        file: fogemulator/flclientaeros:latest
+        repository: docker_hub
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+    interfaces:
+      Standard:
+        create:
+          implementation: application_image
+          inputs:
+            cliArgs: []
+            envVars:
+            - FL_HOST: '1'
+            - FL_NODE_ID: '1'
+            - FL_SERVER: server
+            - FL_BACKEND: pytorch
+            - FL_NODES: '2'
+            - FL_DATASET: MNIST
+            - FL_TRAINING_SET_SIZE: '50000'
+            - FL_TEST_SET_SIZE: '10000'
+            - FL_NUM_OF_THREADS: '4'
+            - TF_NUM_INTRAOP_THREADS: '4'
+            - TF_NUM_INTEROP_THREADS: '4'
+    requirements:
+    - host:
+        node_filter:
+          capabilities: null
+          properties:
+            id: urn:ngsi-ld:InfrastructureElement:aeros1-compute016
+    type: tosca.nodes.Container.Application
+  client-1:
+    artifacts:
+      application_image:
+        file: fogemulator/flclientaeros:latest
+        repository: docker_hub
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+    interfaces:
+      Standard:
+        create:
+          implementation: application_image
+          inputs:
+            cliArgs: []
+            envVars:
+            - FL_HOST: '1'
+            - FL_NODE_ID: '1'
+            - FL_SERVER: server
+            - FL_BACKEND: pytorch
+            - FL_NODES: '2'
+            - FL_DATASET: MNIST
+            - FL_TRAINING_SET_SIZE: '50000'
+            - FL_TEST_SET_SIZE: '10000'
+            - FL_NUM_OF_THREADS: '4'
+            - TF_NUM_INTRAOP_THREADS: '4'
+            - TF_NUM_INTEROP_THREADS: '4'
+    requirements:
+    - host:
+        node_filter:
+          capabilities: null
+          properties:
+            id: urn:ngsi-ld:InfrastructureElement:aeros1-compute010
+    type: tosca.nodes.Container.Application
+tosca_definitions_version: tosca_simple_yaml_1_3

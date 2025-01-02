@@ -1,0 +1,451 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: aeros1-compute005
+      containers:
+      - name: server
+        image: fogemulator/flserveraeros:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: FL_STRATEGY
+          value: "FedAvg"
+        - name: FL_NUM_OF_ROUNDS
+          value: "50"
+        - name: FL_FRACTION_FIT
+          value: "1.0"
+        - name: FL_FRACTION_EVAL
+          value: "1.0"
+        - name: FL_MIN_EVAL_CLIENTS
+          value: "9"
+        - name: FL_MIN_FIT_CLIENTS
+          value: "9"
+        - name: FL_MIN_AVAILABLE_CLIENTS
+          value: "9"
+        - name: FL_BACKEND
+          value: "tensorflow"
+        - name: FL_DATASET
+          value: "CIFAR10"
+        - name: FL_EVAL_DATASET
+          value: "false"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-1
+  template:
+    metadata:
+      labels:
+        app: client-1
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: aeros1-compute010
+      containers:
+      - name: client-1
+        image: fogemulator/flclientaeros:latest
+        env:
+        - name: FL_HOST
+          value: "1"
+        - name: FL_NODE_ID
+          value: "1"
+        - name: FL_SERVER
+          value: "server"
+        - name: FL_BACKEND
+          value: "tensorflow"
+        - name: FL_NODES
+          value: "2"
+        - name: FL_DATASET
+          value: "CIFAR10"
+        - name: FL_TRAINING_SET_SIZE
+          value: "50000"
+        - name: FL_TEST_SET_SIZE
+          value: "10000"
+        - name: FL_NUM_OF_THREADS
+          value: "48"
+        - name: TF_NUM_INTRAOP_THREADS
+          value: "48"
+        - name: TF_NUM_INTEROP_THREADS
+          value: "48"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-2
+  template:
+    metadata:
+      labels:
+        app: client-2
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: aeros1-compute012
+      containers:
+      - name: client-2
+        image: fogemulator/flclientaeros:latest
+        env:
+        - name: FL_HOST
+          value: "1"
+        - name: FL_NODE_ID
+          value: "1"
+        - name: FL_SERVER
+          value: "server"
+        - name: FL_BACKEND
+          value: "tensorflow"
+        - name: FL_NODES
+          value: "2"
+        - name: FL_DATASET
+          value: "CIFAR10"
+        - name: FL_TRAINING_SET_SIZE
+          value: "50000"
+        - name: FL_TEST_SET_SIZE
+          value: "10000"
+        - name: FL_NUM_OF_THREADS
+          value: "48"
+        - name: TF_NUM_INTRAOP_THREADS
+          value: "48"
+        - name: TF_NUM_INTEROP_THREADS
+          value: "48"
+
+---      
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-3
+  template:
+    metadata:
+      labels:
+        app: client-3
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: aeros1-compute013
+      containers:
+      - name: client-3
+        image: fogemulator/flclientaeros:latest
+        env:
+        - name: FL_HOST
+          value: "1"
+        - name: FL_NODE_ID
+          value: "1"
+        - name: FL_SERVER
+          value: "server"
+        - name: FL_BACKEND
+          value: "tensorflow"
+        - name: FL_NODES
+          value: "2"
+        - name: FL_DATASET
+          value: "CIFAR10"
+        - name: FL_TRAINING_SET_SIZE
+          value: "50000"
+        - name: FL_TEST_SET_SIZE
+          value: "10000"
+        - name: FL_NUM_OF_THREADS
+          value: "48"
+        - name: TF_NUM_INTRAOP_THREADS
+          value: "48"
+        - name: TF_NUM_INTEROP_THREADS
+          value: "48"
+
+---          
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-4
+  template:
+    metadata:
+      labels:
+        app: client-4
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: aeros1-compute016
+      containers:
+      - name: client-4
+        image: fogemulator/flclientaeros:latest
+        env:
+        - name: FL_HOST
+          value: "1"
+        - name: FL_NODE_ID
+          value: "1"
+        - name: FL_SERVER
+          value: "server"
+        - name: FL_BACKEND
+          value: "tensorflow"
+        - name: FL_NODES
+          value: "2"
+        - name: FL_DATASET
+          value: "CIFAR10"
+        - name: FL_TRAINING_SET_SIZE
+          value: "50000"
+        - name: FL_TEST_SET_SIZE
+          value: "10000"
+        - name: FL_NUM_OF_THREADS
+          value: "48"
+        - name: TF_NUM_INTRAOP_THREADS
+          value: "48"
+        - name: TF_NUM_INTEROP_THREADS
+          value: "48"    
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-5
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-5
+  template:
+    metadata:
+      labels:
+        app: client-5
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: aeros1-compute022
+      containers:
+      - name: client-5
+        image: fogemulator/flclientaeros:latest
+        env:
+        - name: FL_HOST
+          value: "1"
+        - name: FL_NODE_ID
+          value: "1"
+        - name: FL_SERVER
+          value: "server"
+        - name: FL_BACKEND
+          value: "tensorflow"
+        - name: FL_NODES
+          value: "2"
+        - name: FL_DATASET
+          value: "CIFAR10"
+        - name: FL_TRAINING_SET_SIZE
+          value: "50000"
+        - name: FL_TEST_SET_SIZE
+          value: "10000"
+        - name: FL_NUM_OF_THREADS
+          value: "48"
+        - name: TF_NUM_INTRAOP_THREADS
+          value: "48"
+        - name: TF_NUM_INTEROP_THREADS
+          value: "48"  
+   
+---        
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-6
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-6
+  template:
+    metadata:
+      labels:
+        app: client-6
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: aeros1-compute025
+      containers:
+      - name: client-6
+        image: fogemulator/flclientaeros:latest
+        env:
+        - name: FL_HOST
+          value: "1"
+        - name: FL_NODE_ID
+          value: "1"
+        - name: FL_SERVER
+          value: "server"
+        - name: FL_BACKEND
+          value: "tensorflow"
+        - name: FL_NODES
+          value: "2"
+        - name: FL_DATASET
+          value: "CIFAR10"
+        - name: FL_TRAINING_SET_SIZE
+          value: "50000"
+        - name: FL_TEST_SET_SIZE
+          value: "10000"
+        - name: FL_NUM_OF_THREADS
+          value: "48"
+        - name: TF_NUM_INTRAOP_THREADS
+          value: "48"
+        - name: TF_NUM_INTEROP_THREADS
+          value: "48"     
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-7
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-7
+  template:
+    metadata:
+      labels:
+        app: client-7
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: aeros1-compute030
+      containers:
+      - name: client-7
+        image: fogemulator/flclientaeros:latest
+        env:
+        - name: FL_HOST
+          value: "1"
+        - name: FL_NODE_ID
+          value: "1"
+        - name: FL_SERVER
+          value: "server"
+        - name: FL_BACKEND
+          value: "tensorflow"
+        - name: FL_NODES
+          value: "2"
+        - name: FL_DATASET
+          value: "CIFAR10"
+        - name: FL_TRAINING_SET_SIZE
+          value: "50000"
+        - name: FL_TEST_SET_SIZE
+          value: "10000"
+        - name: FL_NUM_OF_THREADS
+          value: "48"
+        - name: TF_NUM_INTRAOP_THREADS
+          value: "48"
+        - name: TF_NUM_INTEROP_THREADS
+          value: "48" 
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-8
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-8
+  template:
+    metadata:
+      labels:
+        app: client-8
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: aeros1-compute035
+      containers:
+      - name: client-8
+        image: fogemulator/flclientaeros:latest
+        env:
+        - name: FL_HOST
+          value: "1"
+        - name: FL_NODE_ID
+          value: "1"
+        - name: FL_SERVER
+          value: "server"
+        - name: FL_BACKEND
+          value: "tensorflow"
+        - name: FL_NODES
+          value: "2"
+        - name: FL_DATASET
+          value: "CIFAR10"
+        - name: FL_TRAINING_SET_SIZE
+          value: "50000"
+        - name: FL_TEST_SET_SIZE
+          value: "10000"
+        - name: FL_NUM_OF_THREADS
+          value: "48"
+        - name: TF_NUM_INTRAOP_THREADS
+          value: "48"
+        - name: TF_NUM_INTEROP_THREADS
+          value: "48" 
+          
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-9
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-9
+  template:
+    metadata:
+      labels:
+        app: client-9
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: aeros1-compute006
+      containers:
+      - name: client-9
+        image: fogemulator/flclientaeros:latest
+        env:
+        - name: FL_HOST
+          value: "1"
+        - name: FL_NODE_ID
+          value: "1"
+        - name: FL_SERVER
+          value: "server"
+        - name: FL_BACKEND
+          value: "tensorflow"
+        - name: FL_NODES
+          value: "2"
+        - name: FL_DATASET
+          value: "CIFAR10"
+        - name: FL_TRAINING_SET_SIZE
+          value: "50000"
+        - name: FL_TEST_SET_SIZE
+          value: "10000"
+        - name: FL_NUM_OF_THREADS
+          value: "48"
+        - name: TF_NUM_INTRAOP_THREADS
+          value: "48"
+        - name: TF_NUM_INTEROP_THREADS
+          value: "48" 
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+spec:
+  selector:
+    app: server
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+

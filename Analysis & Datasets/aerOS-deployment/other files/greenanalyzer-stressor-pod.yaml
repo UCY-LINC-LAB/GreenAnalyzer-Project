@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: greenanalyzer-stressor
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: aeros2-compute001
+  containers:
+    - name: greenanalyzer-stressor
+      image: fogemulator/greenanalyzer-stressor:latest
+      env:
+        - name: MAX_THREADS
+          value: "48"
+        - name: STEP
+          value: "1"
+        - name: TIMEOUT
+          value: "120s"
+      args: ["CPU"]
+  restartPolicy: Never
+

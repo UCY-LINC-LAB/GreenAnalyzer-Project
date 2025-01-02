@@ -4,7 +4,8 @@ import astral
 from astral import sun
 import pandas as pd
 import openmeteo_requests
-import requests_cache
+# import requests_cache
+from requests import Session
 from retry_requests import retry
 import pytz
 
@@ -43,8 +44,8 @@ class WeatherService(object):
 
     def __init__(self):
         # Setup the Open-Meteo API client with cache and retry on error
-        cache_session = requests_cache.CachedSession('.cache', expire_after=-1)
-        retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
+        session = Session() #requests_cache.CachedSession('.cache', expire_after=-1)
+        retry_session = retry(session, retries=5, backoff_factor=0.2)
         self.openmeteo = openmeteo_requests.Client(session=retry_session)
 
     def get_weather_forecast(self, lat, long, past_days=1, forecast_days=1, timezone='Europe/Athens') -> pd.DataFrame:

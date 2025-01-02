@@ -25,7 +25,7 @@ class RESViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'], name="predict_res")
     def predict(self, request, pk=None):
         res_model: RESModel = self.get_object()
-        horizon = request.data.get('horizon', 1)
+        horizon = request.data.get('horizon', 7)
 
         lat = request.data.get("latitude")
         lon = request.data.get("longitude")
