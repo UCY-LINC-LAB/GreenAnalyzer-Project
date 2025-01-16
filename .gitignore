@@ -3,7 +3,7 @@
 logs.log
 .idea
 .ipynb_checkpoints
-data
+./data/
 *logs.log
 db.sqlite3
 GreenAnalyser-to-aerOS-connector/connector-configs.yaml
