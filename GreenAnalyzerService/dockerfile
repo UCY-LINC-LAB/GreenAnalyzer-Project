@@ -25,7 +25,7 @@ COPY . /app/
 EXPOSE 8000
 
 # Copy the entrypoint script
-COPY --chmod=0755 ./entrypoint.sh /app/entrypoint.sh
+COPY ./entrypoint.sh /app/entrypoint.sh
 
 # Set the entrypoint
 ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]

@@ -14,3 +14,6 @@ retry-requests
 astral
 entsoe-py
 pycountry
+pytz
+optuna
+xgboost

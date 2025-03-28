@@ -1,13 +1,13 @@
-version: '3.8'
+version: '3.3'
 
 services:
   db:
     image: postgres
-    container_name: db
+    hostname: db
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: 'greenuser'
+      POSTGRES_PASSWORD: 'greenpass'
+      POSTGRES_DB: 'green_analyzer'
     volumes:
       - "${PWD}/data:/var/lib/postgresql/data:Z"
 
@@ -21,8 +21,8 @@ services:
     depends_on:
       - db
     environment:
-      ENTSOE_API_KEY: ${ENTSOE_API_KEY}
-      SECRET_KEY: ${SECRET_KEY}
+      ENTSOE_API_KEY: '56ec3e0b-6e1d-4537-896e-d6b61556b40e'
+      SECRET_KEY: 'django-insecure-eyqs-m'
 
 volumes:
   postgres_data:
