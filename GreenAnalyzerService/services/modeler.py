@@ -1,10 +1,13 @@
 import math
 from dataclasses import dataclass, field
 import pandas as pd
-from pycaret.regression import setup, compare_models, tune_model, save_model, load_model
+from pycaret.regression import setup, compare_models, tune_model, save_model, load_model, add_metric
 import json
 import logging
 from typing import List, Dict, Optional, Any, Tuple
+
+import xgboost
+import numpy as np
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -34,7 +37,7 @@ class Model:
 
 
 def validation_results(model, target: str, extra_feature: str, X_test: pd.DataFrame, y_test: pd.Series) -> float:
-    X_test["pred"] = model.predict(X_test[model.feature_names_in_])
+    X_test["pred"] = model.compute_predictions(X_test)#[model.feature_names_in_])
     X_test[target] = y_test
     predictions = X_test.sort_index()
     predictions.loc[predictions[extra_feature] == 0, 'pred'] = 0
@@ -42,6 +45,15 @@ def validation_results(model, target: str, extra_feature: str, X_test: pd.DataFr
     res = res.fillna(0)
     res[res == 2] = 0
     return res.mean()
+    #return 2 * 100 * np.mean((np.abs(y_pred - y_true) / (np.abs(y_true) + np.abs(y_pred))).map(lambda x: 0 if math.isnan(x) else x))
+
+
+# def validation_results_from_predictions(pred: str, target: str, extra_feature: str, predictions: pd.DataFrame) -> float:
+#     predictions.loc[predictions[extra_feature] == 0, pred] = 0
+#     res = 2 * abs(predictions[target] - predictions[pred]) / (predictions[target] + predictions[pred])
+#     res = res.fillna(0)
+#     res[res == 2] = 0
+#     return res.mean()*100
 
 
 @dataclass
@@ -60,7 +72,10 @@ class AIModel(Model):
         timestamp_param = self.params["timestamp_param"]
         included_models = self.params["included_models"]
         optimize_metric = self.params["optimize_metric"]
-
+        
+        def smape_metric(y_true, y_pred):
+            return 2 * 100 * np.mean((np.abs(y_pred - y_true) / (np.abs(y_true) + np.abs(y_pred))).map(lambda x: 0 if math.isnan(x) else x))
+ 
         data = self.dataset[[self.target] + features].reset_index()
         data_train, data_test = data, data
 
@@ -75,7 +90,10 @@ class AIModel(Model):
         y_test = data_test[self.target]
 
         setup(data=data_train, target=self.target, session_id=123, fold=5)
-        best_model = compare_models(include=included_models)
+        
+        add_metric("smape", "SMAPE", score_func=smape_metric, greater_is_better=False)
+        
+        best_model = compare_models(include=included_models, sort=optimize_metric)
         best_model = tune_model(best_model, n_iter=40, choose_better=True, optimize=optimize_metric)
         self.model = best_model
 
@@ -83,7 +101,7 @@ class AIModel(Model):
         return best_model, X_test, y_test
 
     def store_model(self):
-        save_model(self.model_path)
+        save_model(self.model, self.model_path)
         logging.info("Model stored successfully")
 
     def retrieve_model(self) -> Any:
@@ -96,9 +114,10 @@ class AIModel(Model):
             raise ValueError("Model is not trained yet")
 
         # Solve issues with columns identification
-        columns = list(set(X_test.columns).intersection(set(self.model.feature_names_in_)))
+        #columns = list(set(X_test.columns).intersection(set(self.model.feature_names_in_)))
+        #columns = list(self.model.feature_names_in)
 
-        return self.model.predict(X_test[columns])
+        return self.model.predict(X_test)
 
 
 @dataclass
@@ -142,14 +161,13 @@ class NaiveModel(Model):
 class MathModel(Model):
 
     @staticmethod
-    def calculate_energy(DNI, DHI, GHI, thz, gs, air_temp, panel_size, performance_ratio, system_losses, g,
+    def calculate_energy(DNI, DHI, GHI, thz, gs, air_temp, panel_size, panel_tilt, performance_ratio, system_losses, g,
                          nameplate, inverter_transformer, mismatch, connections, dc_wiring, ac_wiring, soiling,
                          availability, shading, sun_tracking, age, *args, **kwargs):
 
         derating_factor = nameplate * inverter_transformer * mismatch * connections * dc_wiring * ac_wiring * soiling * availability * shading * sun_tracking * age
 
-        b = 17  # surface tilt angle in degrees
-        # g = -39 # surface azimuth angle in degrees
+        b = panel_tilt
         albedo = 0.2  # ground reflectance (default value)
 
         # Convert degrees to radians

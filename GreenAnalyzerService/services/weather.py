@@ -61,7 +61,8 @@ class WeatherService(object):
         return self.make_request(url, params, lat, long, timezone)
 
     def get_weather_history(self, lat, long, start_date, end_date, timezone='Europe/Athens') -> pd.DataFrame:
-        url = "https://api.open-meteo.com/v1/forecast"
+        #url = "https://api.open-meteo.com/v1/forecast"
+        url = "https://archive-api.open-meteo.com/v1/archive"
         params = {
             "latitude": lat,
             "longitude": long,
