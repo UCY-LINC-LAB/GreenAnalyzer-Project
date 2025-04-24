@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass, field
 import pandas as pd
-from pycaret.regression import setup, compare_models, tune_model, save_model, load_model, add_metric
+from pycaret.regression import setup, compare_models, tune_model, save_model, load_model, add_metric, get_metrics
 import json
 import logging
 from typing import List, Dict, Optional, Any, Tuple
@@ -92,7 +92,9 @@ class AIModel(Model):
         setup(data=data_train, target=self.target, session_id=123, fold=5)
         
         add_metric("smape", "SMAPE", score_func=smape_metric, greater_is_better=False)
-        
+
+        get_metrics(include_custom=True, raise_errors=True)
+         
         best_model = compare_models(include=included_models, sort=optimize_metric)
         best_model = tune_model(best_model, n_iter=40, choose_better=True, optimize=optimize_metric)
         self.model = best_model

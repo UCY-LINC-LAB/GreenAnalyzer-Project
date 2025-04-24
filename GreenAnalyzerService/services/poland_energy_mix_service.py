@@ -102,4 +102,3 @@ def get_pastdays_energy_mix_data(num_past_days=3):
         print(f"Request failed with status code: {response.status_code}")
         print(response.text)
         return None
-

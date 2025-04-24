@@ -2,7 +2,6 @@ import pandas as pd
 from entsoe import Area, EntsoePandasClient
 from datetime import datetime, timedelta
 
-
 class RestEuropeEnergyMixService(object):
 
     api_key: str
@@ -15,7 +14,6 @@ class RestEuropeEnergyMixService(object):
         self.api_key = api_key
         self.country = country
         self.client = EntsoePandasClient(api_key=api_key)
-
 
     def check_country(self, country):
         country_dict = self.get_countries_dict()
@@ -42,7 +40,7 @@ class RestEuropeEnergyMixService(object):
         # Set the end date to 24 hours from the current time
         tomorrow = now + timedelta(days=3)
 
-        country_code = 'GR'
+        country_code=self.country_code
         wind_and_solar = self.client.query_wind_and_solar_forecast(country_code, start=now, end=tomorrow, psr_type=None)
         wind_and_solar = wind_and_solar.resample('h').first()
         if "Wind Offshore" in wind_and_solar.columns and "Wind Onshore" in wind_and_solar.columns:
