@@ -1,4 +1,5 @@
 import os
+import threading
 
 from django.http import Http404
 from rest_framework import viewsets, status
@@ -19,23 +20,28 @@ from django.core.files.storage import default_storage
 
 model_mapping = dict(AI=AIModel, NAIVE=NaiveModel, MATH=MathModel)
 
+##################################################################################################################################################################
 
 class RESViewSet(viewsets.ModelViewSet):
     queryset = RESModel.objects.none()  # to not print/show all the items of the database
     #queryset = RESModel.objects.all()
     serializer_class = RESSerializer
 
-    def perform_create(self, serializer):
-        instance = serializer.save()
-        # preprocessing_and_training(serializer, default_storage.path(instance.csv_file.name))
-        preprocessing_and_training(instance)
-        # parameters_and_model = training(serializer.validated_data['name'], serializer.validated_data['date_col'], serializer.validated_data['energy_col'], 
-        #                                 serializer.validated_data['lat'], serializer.validated_data['lon'], serializer.validated_data['timezone'], 
-        #                                 serializer.validated_data['model_type'], serializer.validated_data['panel_tilt'], serializer.validated_data['panel_size'], 
-        #                                 serializer.validated_data['n_trials'], serializer.validated_data['optimize_metric'], instance.csv_file.name)
-        # serializer.save(parameters = parameters_and_model[0])
-        # serializer.save(stored_model = parameters_and_model[1])
+    def create(self, request, *args, **kwargs):
 
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response({serializer.validated_data['name']:'Model training has started. Please wait.'}, status=status.HTTP_200_OK)
+    
+    def perform_create(self, serializer):
+       
+        instance = serializer.save()
+        t = threading.Thread(target=preprocessing_and_training, args=[instance])
+        t.start()
+    
 
     @action(detail=True, methods=['get'], name="predict_res")
     def predict(self, request, pk=None):
@@ -47,6 +53,9 @@ class RESViewSet(viewsets.ModelViewSet):
 
         lat = request.query_params.get("latitude")
         lon = request.query_params.get("longitude")
+
+        if not (item.parameters or item.stored_model) :
+            return Response({'message':'The model is not trained yet. Please try again in a few minutes.'}, status=status.HTTP_200_OK)
 
         # Retrieve Weather Data
         if lat and lon:
@@ -85,6 +94,8 @@ class RESViewSet(viewsets.ModelViewSet):
 
         return Response(data, status=status.HTTP_200_OK)
 
+##################################################################################################################################################################
+
 
 class EnergyProfileView(viewsets.ModelViewSet):
     queryset = EnergyProfile.objects.all()
@@ -93,7 +104,8 @@ class EnergyProfileView(viewsets.ModelViewSet):
 @api_view(['GET'])
 @renderer_classes([JSONRenderer])
 def predict_country_energy_mix(request):
-    country = request.data.get("country", "POLAND")
+    # country = request.data.get("country", "POLAND")
+    country = request.query_params.get("country", "POLAND")
 
     if country in ["POLAND", "CYPRUS"]:
         cem = CountryEnergyMix(country)
@@ -101,15 +113,24 @@ def predict_country_energy_mix(request):
         cem = RestEuropeEnergyMixService(api_key=os.getenv("ENTSOE_API_KEY"), country=country)
 
     pv, wind, total = cem.predict_mix()
+
     pv = pv.reset_index()
     pv, wind, total = update_output(pv, total, wind)
+
     gCO2eq_footprint_per_KWh = get_carbon_footprint(pv, wind, total, country)
 
-    return Response({"pv": pv.to_dict("records"),
-                     "wind": wind.to_dict("records"),
-                     "total": total.to_dict("records"),
-                     "carbon_intensity": gCO2eq_footprint_per_KWh.to_dict("records")})
+    # return Response({"pv": pv.to_dict("records"),
+    #                 "wind": wind.to_dict("records"),
+    #                 "total": total.to_dict("records"),
+    #                 "carbon_intensity": gCO2eq_footprint_per_KWh.to_dict("records")})
 
+    predictions = pv.copy()
+    predictions = predictions.rename({'pred':'pv'},axis=1)
+    predictions['wind'] = wind['pred']
+    predictions['total'] = total['pred']
+    predictions['gCO2eq_footprint_per_KWh'] =  gCO2eq_footprint_per_KWh
+
+    return Response({'predictions_MW': predictions.to_dict('records')})
 
 def update_output(pv, total, wind):
     if "predictions_pv" in pv.columns:

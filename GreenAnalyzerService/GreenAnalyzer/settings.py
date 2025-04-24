@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +43,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'GreenAnalyzer',
 ]
+
+CRONJOBS = [
+    ('*/1 * * * *', 'GreenAnalyzer.cron.print_hw'),
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

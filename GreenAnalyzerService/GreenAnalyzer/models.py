@@ -2,6 +2,9 @@ from datetime import timezone
 
 from django.db import models
 
+import pytz
+
+
 
 class RESModel(models.Model):
     STATUS_CHOICES = [
@@ -25,51 +28,38 @@ class RESModel(models.Model):
         ('SMAPE', 'SMAPE')
     ]
 
-        # identity = 1
-        # id_provided = True
-
-        # date_col = 'date'
-        # pv_col = 'inverter1'
-
-        # latitude = 35.1542
-        # longitude = 33.3964
-        # timezone = 'Europe/Moscow'
-
-        # model_type = 'Naive' #['AI','Naive','Math']
-
-        # panel_tilt = 17
-        # panel_size = 63*1.7*1
-        # n_trials = 100
-
-        # optimize_metric = 'MAPE'
+    TIMEZONE_CHOICES = [(t, t) for t in pytz.all_timezones]
 
     name = models.CharField(max_length=100, unique=True, primary_key=True)
     res_type = models.CharField(max_length=100, choices=STATUS_CHOICES)
-    # days_of_prediction = models.IntegerField(default=2)
     lat = models.FloatField()
     lon = models.FloatField()
-    timezone = models.CharField(max_length=100, default='Europe/Athens')
+    timezone = models.CharField(max_length=100, choices=TIMEZONE_CHOICES, default=None)
     model_type = models.CharField(max_length=100, choices=MODEL_CHOICES)
-    optimize_metric = models.CharField(max_length=100, choices=METRIC_CHOICES, default='MAPE')
-    n_trials = models.IntegerField(default=100)
+    date_col = models.CharField(max_length=100)
+    energy_col = models.CharField(max_length=100)
 
-    date_col = models.CharField(max_length=100, default='date')
-    energy_col = models.CharField(max_length=100, default='energy')
-    panel_tilt = models.FloatField(default=20)
-    panel_size = models.FloatField(default=10)
+    optimize_metric = models.CharField(max_length=100, choices=METRIC_CHOICES, default=None, null=True)
+    n_trials = models.IntegerField(default=100)
+ 
+    panel_tilt = models.FloatField(default=None, null=True)
+    panel_size = models.FloatField(default=None, null=True)
 
     parameters = models.JSONField(default=None, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    stored_model = models.FileField(upload_to='energy_pv_models', default=None)
+    stored_model = models.FileField(upload_to='energy_pv_models', default=None, null=True)
 
-    csv_file = models.FileField(upload_to='dfs', default=None)
+    csv_file = models.FileField(upload_to='dfs')
 
     def get_model_path(self):
         if self.stored_model:
             return self.stored_model.name.replace('.pkl', '') # self.stored_model.path.replace('.pkl', '')
+        
+
+
 
 class EnergyProfile(models.Model):
     name = models.CharField(max_length=100, unique=True, primary_key=True)
