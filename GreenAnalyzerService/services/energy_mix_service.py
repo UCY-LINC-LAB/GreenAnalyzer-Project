@@ -101,77 +101,10 @@ class CountryEnergyMix(object):
         # Creating an hourly date range
         steps = len(df[df['date']>energy_mix_df.index[-1]][forecaster_pv_loaded.exog_col_names])
 
-       
-        # Force lowercase 'h' frequency by reindexing + setting it explicitly
-        # def enforce_lower_h(series):
-        #     series = series.asfreq('h')  # Ensures the data is actually hourly
-        #     series.index.freq = to_offset('h')  # Force freq attribute
-        #     return series
-
-        # def reset_index_with_lower_h(series):
-        #     # Step 1: Remove timezone
-        #     series = series.tz_localize(None)
-            
-        #     # Step 2: Build new index with lowercase 'h'
-        #     new_index = pd.date_range(start=series.index[0], periods=len(series), freq='h')
-        #     series.index = new_index
-            
-        #     # Optional Step 3: Re-apply timezone
-        #     # series = series.tz_localize('Europe/Athens')  # only if you need it later
-            
-        #     return series
-        
-        # def strip_freq(series):
-        #     series = series.copy()
-        #     series.index.freq = None  # Remove freq entirely
-        #     return series
-        
-        # def force_datetime_index(series):
-        #     series = series.copy()
-            
-        #     # If not already a DatetimeIndex, create one based on values
-        #     if not isinstance(series.index, pd.DatetimeIndex):
-        #         start = pd.to_datetime('now').floor('h') - pd.Timedelta(hours=len(series))
-        #         series.index = pd.date_range(start=start, periods=len(series), freq='h')
-            
-        #     # Strip frequency if present (just in case)
-        #     series.index.freq = None
-            
-        #     return series
-
-
-        # def force_datetime_index(series):
-        #     series = series.copy()
-        #     if not isinstance(series.index, pd.DatetimeIndex):
-        #         print("WARNING: Fixing non-DatetimeIndex to DatetimeIndex")
-        #         start = pd.to_datetime('now').floor('h') - pd.Timedelta(hours=len(series))
-        #         series.index = pd.date_range(start=start, periods=len(series), freq='h')
-        #     series.index.freq = None  # Strip freq to avoid 'H' vs 'h'
-        #     return series
-
-        # last_window_wind = force_datetime_index(energy_mix_df["wind"])
-        # print("WIND index type:", type(last_window_wind.index))
-
-        # # last_window_pv = reset_index_with_lower_h(energy_mix_df["pv"].copy())
-        # last_window_wind = force_datetime_index(energy_mix_df["wind"].copy())
-        # # last_window_total = reset_index_with_lower_h(energy_mix_df["total"].copy())
-        # # print("Freqstr check:", last_window_wind.index.freqstr)
-        # # print(last_window_wind.index[:5])
-        # print(type(last_window_wind.index))          # should be <class 'pandas.DatetimeIndex'>
-        # print(last_window_wind.index.freq)           # should be None
-        # print(last_window_wind.index.freqstr)        # might error if None, that's okay
-        # print(last_window_wind.index[:3])            # show sample of datetimes
-
-
         pv_forecast = forecaster_pv_loaded.predict(
             steps=steps, exog=exog_params[forecaster_pv_loaded.exog_col_names], last_window=energy_mix_df["pv"])
 
         pv_forecast = self.calibrate_pv(pv_forecast, exog_params)
-
-        # last_window_wind = energy_mix_df['wind'].copy()
-        # last_window_wind.index.freq = pd.tseries.frequencies.to_offset('h')
-
-        # last_window_wind = enforce_lower_h(energy_mix_df["wind"])
 
         wind_forecast = forecaster_wind_loaded.predict(steps=steps,
                                      exog=exog_params[forecaster_wind_loaded.exog_col_names],
