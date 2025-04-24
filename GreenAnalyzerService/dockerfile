@@ -15,7 +15,9 @@ RUN pip install --upgrade pip
 # Install the dependencies from the requirements file
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN apt-get update
+RUN apt-get update && \
+    apt-get install -y cron && \
+    apt-get clean
 
 RUN apt-get install libgomp1
 # Copy the entire project to the working directory
