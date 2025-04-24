@@ -445,9 +445,9 @@ def df_train_models_poland():
     save_forecaster(forecaster_remainder, file_name='../energy_mix_models/POLAND/forecaster_remainder.joblib', verbose=False)
 
     
-# update_mix_cyprus()
-# update_df_cyprus()
-# df_train_models_cyprus()
+update_mix_cyprus()
+update_df_cyprus()
+df_train_models_cyprus()
 
 update_mix_poland()
 update_df_poland()
