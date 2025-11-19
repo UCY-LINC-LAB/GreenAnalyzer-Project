@@ -54,3 +54,31 @@ Like for the inverters files the file names indicate the date range covered by t
 * math_model_18.04.2024-04.05.2024.csv
 * math_model_all_inverters_03.11.2023-25.06.2024.csv
 
+## Weather data Files
+
+These files contain weather data retrieved from the Open-Meteo API ([open-meteo API](https://open-meteo.com/)) for the geolocation latitude = 35.15, longitude = 33.40, obtained either through direct API requests or by downloading CSV files.
+
+### Files obtained through direct API requests
+
+Columns:
+
+* time: Timestamps of the hourly measurements
+* temperature_2m (°C), relative_humidity_2m (%), dew_point_2m (°C), apparent_temperature (°C), precipitation (mm), rain (mm), snowfall (cm), snow_depth (m), weather_code (wmo code), pressure_msl (hPa), surface_pressure (hPa), cloud_cover (%), cloud_cover_low (%), cloud_cover_mid (%), cloud_cover_high (%), et0_fao_evapotranspiration (mm), vapour_pressure_deficit (kPa), wind_speed_10m (km/h), wind_speed_100m (km/h), wind_direction_10m (°), wind_direction_100m (°), wind_gusts_10m (km/h), soil_temperature_0_to_7cm (°C), soil_temperature_7_to_28cm (°C), soil_temperature_28_to_100cm (°C), soil_temperature_100_to_255cm (°C), soil_moisture_0_to_7cm (m³/m³), soil_moisture_7_to_28cm (m³/m³), soil_moisture_28_to_100cm (m³/m³), soil_moisture_100_to_255cm (m³/m³), is_day (), sunshine_duration (s), shortwave_radiation (W/m²), direct_radiation (W/m²), diffuse_radiation (W/m²), direct_normal_irradiance (W/m²), global_tilted_irradiance (W/m²), terrestrial_radiation (W/m²), shortwave_radiation_instant (W/m²), direct_radiation_instant (W/m²), diffuse_radiation_instant (W/m²), direct_normal_irradiance_instant (W/m²), global_tilted_irradiance_instant (W/m²), terrestrial_radiation_instant (W/m²): Weather variables
+
+Like previously, the file names indicate the date ranges covered:
+
+* weather_data_01.06.2023-01.06.2024.csv
+* weather_data_01.06.2024-26.06.2024.csv
+
+### Files obtained by downloading CSV files
+
+Columns:
+
+* air_temp, albedo, azimuth, clearsky_dhi, clearsky_dni, clearsky_ghi, clearsky_gti, cloud_opacity, dewpoint_temp, dhi, dni, ghi, gti, precipitable_water, precipitation_rate, relative_humidity, surface_pressure, snow_depth, snow_water_equivalent, snow_soiling_rooftop, snow_soiling_ground, wind_direction_100m, wind_direction_10m, wind_speed_100m, wind_speed_10m, zenith: Weather Variables
+* period_end: Timestamp of the measurement (recorded every 5 minutes)
+* period: Duration since the previous measurement (e.g., PT5M = 5 minutes)
+
+Like previously, the file names indicate the date ranges covered:
+
+* weather_data_01.06.2023-30.06.2023.csv
+* weather_data_01.10.2023-05.06.2024.csv
