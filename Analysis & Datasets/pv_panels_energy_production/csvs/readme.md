@@ -4,14 +4,18 @@ This file provides detailed information about the CSV files in this folder.
 
 ## Inverters Files
 
-These files contain measurements of the power produced by the facility’s PV panels. The data were collected from the inverters and retrieved using the Prometheus interface.
+These files contain measurements of the power produced by the facility’s PV panels. The data were collected from the inverters and retrieved using the Prometheus interface. The facility consists of three (3) PV racks of different sizes. Specifically:
+
+* rack-1 (PV1): 107.1 m2
+* rack-2 (PV2): 95.2 m2
+* rack-3 (PV3): 57.8 m2
 
 Each file includes the following columns:
 
 * date: Timestamp of the measurement (recorded every 15 seconds)
 
 * inverter1: Power produced by PV panel 1 (W)
-
+ 
 * inverter2: Power produced by PV panel 2 (W)
 
 * inverter3: Power produced by PV panel 3 (W)
